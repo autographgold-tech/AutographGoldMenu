@@ -1402,9 +1402,11 @@
     }
 
     function resolveMenuImage(item){
-      const mapped = normalizeImagePath(KNOWN_IMAGE_MAP[item.name] || "");
-      const expected = mapped || expectedImagePath(item.name);
-      return { imagePath: mapped, expectedPath: expected };
+      const mapped = KNOWN_IMAGE_MAP[item.name] || "";
+      return {
+        imagePath: mapped,
+        expectedPath: mapped
+      };
     }
 
     function parsePrice(priceValue){
@@ -1634,6 +1636,7 @@
 
       const { imagePath, expectedPath } = resolveMenuImage(item);
       const finalImage = imagePath || expectedPath;
+      console.log(imagePath);
       if(finalImage){
         thumb.style.setProperty("--item-image", `url('${finalImage}')`);
         placeholder.style.display = "none";
