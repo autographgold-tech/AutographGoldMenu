@@ -1283,44 +1283,44 @@
     ];
 
     const KNOWN_IMAGE_MAP = {
-      "Цезарь с цыпленком": "assets/caesar_chicken.jpg",
-      "Салат баварский": "assets/bavarian_salad.jpg",
-      "Хрустящие баклажаны": "assets/crispy_eggplant.jpg",
-      "Оливье с семгой": "assets/olivier_salad.jpg",
-      "Салат с ростбифом": "assets/roast_beef_salad.jpg",
+      "Цезарь с цыпленком": "assets/menu/caesar_chicken.jpg",
+      "Салат баварский": "assets/menu/bavarian_salad.jpg",
+      "Хрустящие баклажаны": "assets/menu/crispy_eggplant.jpg",
+      "Оливье с семгой": "assets/menu/olivier_salad.jpg",
+      "Салат с ростбифом": "assets/menu/roast_beef_salad.jpg",
 
-      "Бефстроганов из телятины": "assets/beef_stroganoff.jpg",
-      "Филе миньон": "assets/filet_mignon.jpg",
-      "Паста Карбонара": "assets/carbonara.jpg",
-      "Стейк из цветной капусты": "assets/cauliflower_steak.jpg",
+      "Бефстроганов из телятины": "assets/menu/beef_stroganoff.jpg",
+      "Филе миньон": "assets/menu/filet_mignon.jpg",
+      "Паста Карбонара": "assets/menu/carbonara.jpg",
+      "Стейк из цветной капусты": "assets/menu/cauliflower_steak.jpg",
 
-      "Пивной сет": "assets/beer_set.jpg",
-      "Пивные креветки": "assets/shrimp_bear.jpg",
+      "Пивной сет": "assets/menu/beer_set.jpg",
+      "Пивные креветки": "assets/menu/shrimp_bear.jpg",
 
-      "Шашлык из куриного филе": "assets/chicken_kebab.jpg",
-      "Шашлык из утки": "assets/duck_kebab.jpg",
-      "Шашлык из шампиньонов": "assets/mashroom_kebab.jpg",
+      "Шашлык из куриного филе": "assets/menu/chicken_kebab.jpg",
+      "Шашлык из утки": "assets/menu/duck_kebab.jpg",
+      "Шашлык из шампиньонов": "assets/menu/mushroom_kebab.jpg",
 
-      "Мясное плато на гриле": "assets/meat_platter_big.jpg",
-      "Мясная нарезка": "assets/meat_platter.jpg",
-      "Ассорти шашлыков Hard": "assets/mixed_kebab_platter_hard.jpg",
+      "Мясное плато на гриле": "assets/menu/meat_platter_big.jpg",
+      "Мясная нарезка": "assets/menu/meat_platter.jpg",
+      "Ассорти шашлыков Hard": "assets/menu/mixed_kebab_platter_hard.jpg",
 
-      "Рыбная нарезка": "assets/fish_platter.jpg",
-      "Фруктовая нарезка": "assets/fruit_platter.jpg",
+      "Рыбная нарезка": "assets/menu/fish_platter.jpg",
+      "Фруктовая нарезка": "assets/menu/fruit_platter.jpg",
 
-      "Ассорти брускетт": "assets/bruschetta_platter.jpg",
-      "Сырное плато": "assets/cheese_platter.jpg",
-      "Ассорти солений": "assets/pickled_vegetables_platter.jpg",
-      "Сельдь по-домашнему": "assets/herring_home_style.jpg",
+      "Ассорти брускетт": "assets/menu/bruschetta_platter.jpg",
+      "Сырное плато": "assets/menu/cheese_platter.jpg",
+      "Ассорти солений": "assets/menu/pickled_vegetables_platter.jpg",
+      "Сельдь по-домашнему": "assets/menu/herring_home_style.jpg",
 
-      "Томленые баклажаны": "assets/braised_eggplant.jpg",
-      "Крем-суп чечевичный": "assets/lentil_soup.jpg",
-      "Рамен с курицей": "assets/ramen_chicken.jpg",
-      "Шорпа с бараниной": "assets/shorpa_lamb.jpg",
-      "Кеспе с кониной": "assets/kespe_horse.jpg"
+      "Томленые баклажаны": "assets/menu/braised_eggplant.jpg",
+      "Крем-суп чечевичный": "assets/menu/lentil_soup.jpg",
+      "Рамен с курицей": "assets/menu/ramen_chicken.jpg",
+      "Шорпа с бараниной": "assets/menu/shorpa_lamb.jpg",
+      "Кеспе с кониной": "assets/menu/kespe_horse.jpg"
     };
 
-    const HERO_IMAGE = "assets/meat_platter_big.jpg";
+    const HERO_IMAGE = "assets/menu/meat_platter_big.jpg";
 
     const menuRoot = document.getElementById("menuRoot");
     const tabs = document.getElementById("tabs");
@@ -1378,9 +1378,9 @@
       let normalized = String(path).trim().replace(/\\/g, "/").replace(/^\/+/, "");
       if(!normalized) return "";
 
-      if(!normalized.startsWith("assets/")){
+      if(!normalized.startsWith("assets/menu/")){
         const filename = normalized.split("/").pop();
-        normalized = filename ? `assets/${filename}` : "";
+        normalized = filename ? `assets/menu/${filename}` : "";
       }
 
       return normalized;
@@ -1391,7 +1391,7 @@
         .toLowerCase()
         .replace(/[^a-zа-я0-9]+/g, "_")
         .replace(/^_+|_+$/g, "");
-      return `assets/${fileName}.jpg`;
+      return `assets/menu/${fileName}.jpg`;
     }
 
     function reportMissingImage(itemName, expectedPath){
@@ -2056,7 +2056,14 @@
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     if(HERO_IMAGE.trim()){
-      heroCard.style.setProperty("--hero-image", `url('${HERO_IMAGE}')`);
+      const heroProbe = new Image();
+      heroProbe.onload = () => {
+        heroCard.style.setProperty("--hero-image", `url('${HERO_IMAGE}')`);
+      };
+      heroProbe.onerror = () => {
+        heroCard.style.setProperty("--hero-image", "url('assets/menu/meat_platter.jpg')");
+      };
+      heroProbe.src = HERO_IMAGE;
     }
 
     window.getMissingMenuImagesReport = () =>
