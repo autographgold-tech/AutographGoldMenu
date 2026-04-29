@@ -1635,24 +1635,21 @@
       thumb.appendChild(placeholder);
 
       const { imagePath, expectedPath } = resolveMenuImage(item);
-      const finalImage = imagePath || expectedPath;
       console.log(imagePath);
-      if(finalImage){
-        thumb.style.setProperty("--item-image", `url('${finalImage}')`);
+      if(imagePath){
+        thumb.style.setProperty("--item-image", `url('${imagePath}')`);
         placeholder.style.display = "none";
 
         const img = document.createElement("img");
         img.className = "thumb-img";
-        img.src = finalImage;
+        img.src = imagePath;
         img.loading = "lazy";
         img.decoding = "async";
         img.alt = item.name;
-
         img.onerror = () => {
-          // Photo не загрузилась → показываем placeholder
           placeholder.style.display = "";
           thumb.classList.add("no-image");
-          console.warn(`[menu-image-error] "${item.name}" failed to load: ${finalImage}`);
+          console.warn(`[menu-image-error] "${item.name}" failed to load: ${imagePath}`);
           reportMissingImage(item.name, expectedPath);
         };
 
